@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
 import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { LayoutDashboard, FileText, BarChart3, Users, Settings, LogOut, Menu, X, ChevronDown, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { LayoutDashboard, FileText, Users, Settings, LogOut, Menu, X, ChevronDown, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const NAV = [
   { type: "link", to: "/dashboard", label: "Dashboard", icon: <LayoutDashboard size={20} />, end: true },
   { type: "link", to: "/dashboard/documents", label: "เอกสาร", icon: <FileText size={20} /> },
+  { type: "link", to: "/dashboard/employees", label: "พนักงาน", icon: <Users size={20} /> },
   {
     type: "group",
-    label: "รายงาน",
-    icon: <BarChart3 size={20} />,
+    label: "ตั้งค่าระบบ",
+    icon: <Settings size={20} />,
     children: [
+      { to: "/dashboard/settings", label: "ตั้งค่า" },
       { to: "/dashboard/reports", label: "สรุปรายงาน" },
       { to: "/dashboard/attendance", label: "รายการเข้าออกงาน" },
     ],
   },
-  { type: "link", to: "/dashboard/employees", label: "พนักงาน", icon: <Users size={20} /> },
-  { type: "link", to: "/dashboard/settings", label: "ตั้งค่าระบบ", icon: <Settings size={20} /> },
 ];
 
 export default function DashboardLayout() {
