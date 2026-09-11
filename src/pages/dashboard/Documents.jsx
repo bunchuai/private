@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Search, Plus, FileText, Download, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Search, Plus, FileText, Download, X, ChevronDown } from "lucide-react";
 
 const initialDocs = [
   { no: "DOC-1142", name: "สัญญาจ้างเหมาก่อสร้าง", dept: "จัดซื้อ", date: "11/09/2026", status: "ส่งแล้ว" },
@@ -28,14 +28,28 @@ export default function Documents() {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState("");
   const [form, setForm] = useState({ no: nextDocNo(initialDocs), name: "", dept: DEPTS[0], date: "" });
+  const [deptOpen, setDeptOpen] = useState(false);
+  const [deptQuery, setDeptQuery] = useState("");
+  const comboboxRef = useRef(null);
 
   const today = () => new Date().toLocaleDateString("en-GB").split("/").reverse().map((p) => p.padStart(2, "0")).join("/");
 
   const openForm = () => {
     setForm({ no: nextDocNo(docs), name: "", dept: DEPTS[0], date: today() });
+    setDeptQuery(DEPTS[0]);
     setError("");
     setOpen(true);
   };
+
+  const deptMatches = DEPTS.filter((d) => d.toLowerCase().includes(deptQuery.trim().toLowerCase()));
+
+  useEffect(() => {
+    const onClick = (e) => {
+      if (comboboxRef.current && !comboboxRef.current.contains(e.target)) setDeptOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
 
   const submit = (e) => {
     e.preventDefault();
@@ -43,7 +57,7 @@ export default function Documents() {
       setError("กรุณากรอกชื่อเอกสาร");
       return;
     }
-    setDocs([{ ...form, name: form.name.trim(), status: "รอดำเนินการ" }, ...docs]);
+    setDocs([{ ...form, name: form.name.trim(), dept: (form.dept || deptQuery).trim(), status: "รอดำเนินการ" }, ...docs]);
     setOpen(false);
   };
 
@@ -123,12 +137,33 @@ export default function Documents() {
                 {error && <span className="field-error">{error}</span>}
               </label>
 
-              <label className="field">
+              <div className="field combobox" ref={comboboxRef}>
                 <span>แผนก</span>
-                <select value={form.dept} onChange={(e) => setForm({ ...form, dept: e.target.value })}>
-                  {DEPTS.map((d) => <option key={d} value={d}>{d}</option>)}
-                </select>
-              </label>
+                <div className="combobox-box">
+                  <input
+                    value={deptQuery}
+                    onFocus={() => setDeptOpen(true)}
+                    onChange={(e) => { setDeptQuery(e.target.value); setDeptOpen(true); }}
+                    placeholder="ค้นหาแผนก..."
+                  />
+                  <ChevronDown size={16} />
+                </div>
+                {deptOpen && (
+                  <div className="combobox-list">
+                    {deptMatches.length === 0 && <div className="combobox-empty">ไม่พบแผนก</div>}
+                    {deptMatches.map((d) => (
+                      <button
+                        key={d}
+                        type="button"
+                        className={d === form.dept ? "active" : ""}
+                        onClick={() => { setForm({ ...form, dept: d }); setDeptQuery(d); setDeptOpen(false); }}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               <label className="field">
                 <span>วันที่</span>
