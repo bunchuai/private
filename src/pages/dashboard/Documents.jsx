@@ -246,7 +246,7 @@ export default function Documents() {
       </div>
 
       {open && (
-        <div className="modal-overlay" onClick={() => setOpen(false)}>
+        <div className="modal-overlay">
           <div className="modal-card form-card" onClick={(e) => e.stopPropagation()}>
             <div className="form-head">
               <h2>สร้างเอกสารใหม่</h2>
@@ -316,7 +316,7 @@ export default function Documents() {
         </div>
       )}
       {confirmOpen && pending && (
-        <div className="modal-overlay" onClick={() => setConfirmOpen(false)}>
+        <div className="modal-overlay">
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
             <div className="modal-icon ok"><FileText size={24} /></div>
             <h2>ยืนยันการสร้างเอกสาร</h2>
