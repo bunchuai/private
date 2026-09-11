@@ -62,8 +62,12 @@ export default function Documents() {
 
   const validate = () => {
     const errs = {};
-    if (!form.name.trim()) errs.name = "กรุณากรอกชื่อเอกสาร";
-    else if (form.name.trim().length < 2) errs.name = "ชื่อเอกสารต้องอย่างน้อย 2 ตัวอักษร";
+    const name = form.name.trim();
+    if (!name) errs.name = "กรุณากรอกชื่อเอกสาร";
+    else if (name.length < 2) errs.name = "ชื่อเอกสารต้องอย่างน้อย 2 ตัวอักษร";
+    else if (!/[\u0E00-\u0E7Fa-zA-Z0-9]/.test(name)) errs.name = "ชื่อเอกสารต้องมีตัวอักษรหรือตัวเลข";
+    else if (/^(.)\1*$/.test(name.replace(/\s+/g, ""))) errs.name = "ชื่อเอกสารไม่ถูกต้อง (ตัวอักษรซ้ำกันทั้งชื่อ)";
+    else if (/[^\u0E00-\u0E7Fa-zA-Z0-9 \-\/,()\.]/.test(name)) errs.name = "ห้ามใช้สัญลักษณ์พิเศษ (เช่น @ # ! $)";
 
     if (!(form.dept || deptQuery).trim().toLowerCase()) errs.dept = "กรุณาเลือกแผนก";
 
