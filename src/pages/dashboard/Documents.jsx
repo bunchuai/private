@@ -30,6 +30,8 @@ export default function Documents() {
   const [form, setForm] = useState({ no: nextDocNo(initialDocs), name: "", dept: DEPTS[0], date: "" });
   const [deptOpen, setDeptOpen] = useState(false);
   const [deptQuery, setDeptQuery] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pending, setPending] = useState(null);
   const comboboxRef = useRef(null);
 
   const today = () => {
@@ -99,7 +101,19 @@ export default function Documents() {
   const submit = (e) => {
     e.preventDefault();
     if (!validate()) return;
-    setDocs([{ ...form, no: form.no.trim(), name: form.name.trim(), dept: (form.dept || deptQuery).trim(), date: fmtDate(form.date), status: "รอดำเนินการ" }, ...docs]);
+    setPending({
+      no: form.no.trim(),
+      name: form.name.trim(),
+      dept: (form.dept || deptQuery).trim(),
+      date: fmtDate(form.date),
+      status: "รอดำเนินการ",
+    });
+    setConfirmOpen(true);
+  };
+
+  const confirmCreate = () => {
+    setDocs([pending, ...docs]);
+    setConfirmOpen(false);
     setOpen(false);
   };
 
@@ -227,6 +241,24 @@ export default function Documents() {
                 <button type="submit" className="primary-btn modal-btn">สร้างเอกสาร</button>
               </div>
             </form>
+          </div>
+        </div>
+      {confirmOpen && pending && (
+        <div className="modal-overlay" onClick={() => setConfirmOpen(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-icon ok"><FileText size={24} /></div>
+            <h2>ยืนยันการสร้างเอกสาร</h2>
+            <p>ตรวจสอบข้อมูลก่อนยืนยันการสร้างเอกสารฉบับใหม่</p>
+            <div className="confirm-rows">
+              <div className="confirm-row"><span>เลขที่</span><strong>{pending.no}</strong></div>
+              <div className="confirm-row"><span>ชื่อเอกสาร</span><strong>{pending.name}</strong></div>
+              <div className="confirm-row"><span>แผนก</span><strong>{pending.dept}</strong></div>
+              <div className="confirm-row"><span>วันที่</span><strong>{pending.date}</strong></div>
+            </div>
+            <div className="modal-actions">
+              <button type="button" className="ghost-btn modal-btn" onClick={() => setConfirmOpen(false)}>แก้ไข</button>
+              <button type="button" className="primary-btn modal-btn" onClick={confirmCreate}>ยืนยันการสร้าง</button>
+            </div>
           </div>
         </div>
       )}

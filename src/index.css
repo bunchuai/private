@@ -706,6 +706,12 @@ button, input { font: inherit; }
   margin: 0 auto 16px;
 }
 .modal-icon.warn { background: #fdeaea; color: #e0533d; }
+.modal-icon.ok { background: #e7f6ef; color: #1e9e6a; }
+.confirm-rows { margin: 0 0 24px; padding: 6px 0; border-top: 1px dashed #e5ebf5; border-bottom: 1px dashed #e5ebf5; text-align: left; }
+.confirm-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 9px 2px; font-size: 14px; }
+.confirm-row + .confirm-row { border-top: 1px solid #f2f5fa; }
+.confirm-row span { color: #8a9ab1; font-size: 13px; }
+.confirm-row strong { color: #153b76; text-align: right; }
 .modal-card h2 { margin: 0 0 9px; font-size: 22px; color: #153b76; }
 .modal-card p { margin: 0 0 24px; color: #6f82a0; font-size: 14.5px; line-height: 1.7; }
 .modal-actions { display: flex; gap: 12px; justify-content: center; }
