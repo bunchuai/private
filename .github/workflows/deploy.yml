@@ -26,6 +26,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          GH_PAGES: "true"
 
       - name: SPA fallback for deep links
         run: cp dist/index.html dist/404.html
