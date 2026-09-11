@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Search, Plus, FileText, X, ChevronDown, FileDown } from "lucide-react";
+import ThaiDatePicker from "../../components/ThaiDatePicker";
 
 const initialDocs = [
   { no: "DOC-1142", name: "สัญญาจ้างเหมาก่อสร้าง", dept: "จัดซื้อ", date: "11/09/2026", status: "ส่งแล้ว" },
@@ -302,11 +303,10 @@ export default function Documents() {
 
               <label className="field">
                 <span>วันที่</span>
-                <input
-                  className={errors.date ? "input-error" : ""}
-                  type="date"
+                <ThaiDatePicker
                   value={form.date}
-                  onChange={(e) => { setForm({ ...form, date: e.target.value }); clearErr("date"); }}
+                  onChange={(iso) => { setForm({ ...form, date: iso }); clearErr("date"); }}
+                  invalid={errors.date}
                 />
                 {errors.date && <span className="field-error">{errors.date}</span>}
               </label>

@@ -609,6 +609,42 @@ button, input { font: inherit; }
 .combobox-list button.active { background: #e3edff; font-weight: 600; }
 .combobox-empty { padding: 10px 12px; font-size: 13px; color: #8a9ab1; text-align: center; }
 
+/* ===== Thai Date Picker ===== */
+.tdp-wrap { position: relative; }
+.tdp-box { position: relative; }
+.tdp-box input { padding-right: 36px; cursor: pointer; }
+.tdp-box svg { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #8a9ab1; pointer-events: none; }
+.tdp-panel {
+  position: absolute; top: calc(100% + 6px); left: 0; z-index: 40; width: 280px;
+  background: #fff; border: 1px solid #d7dfeb; border-radius: 12px;
+  box-shadow: 0 14px 34px rgba(12,26,48,.16); padding: 12px;
+}
+.tdp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.tdp-head button {
+  display: grid; place-items: center; width: 30px; height: 30px;
+  border: 0; border-radius: 8px; background: #f0f3f8; color: #153b76; cursor: pointer;
+}
+.tdp-head button:hover { background: #e3edff; }
+.tdp-head strong { font-size: 14px; color: #153b76; }
+.tdp-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; margin-bottom: 4px; }
+.tdp-week span { text-align: center; font-size: 11.5px; font-weight: 700; color: #8a9ab1; padding: 3px 0; }
+.tdp-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.tdp-grid > span { padding: 0; }
+.tdp-grid button {
+  display: grid; place-items: center; height: 32px;
+  border: 0; border-radius: 8px; background: none;
+  font-size: 13.5px; color: #1d3d6e; cursor: pointer;
+}
+.tdp-grid button:hover { background: #f0f5ff; }
+.tdp-grid button.tdp-sel { background: #3a7ff0; color: #fff; font-weight: 700; }
+.tdp-grid button.tdp-today:not(.tdp-sel) { border: 1.5px solid #3a7ff0; }
+.tdp-foot { margin-top: 8px; padding-top: 8px; border-top: 1px solid #f0f3f8; display: flex; justify-content: flex-end; }
+.tdp-foot button {
+  border: 0; background: #e3edff; color: #3a7ff0;
+  font-size: 13px; font-weight: 600; padding: 7px 16px; border-radius: 8px; cursor: pointer;
+}
+.tdp-foot button:hover { background: #d2e2ff; }
+
 .toggle-row {
   display: flex; justify-content: space-between; align-items: center;
   gap: 16px; padding: 14px 0; border-bottom: 1px solid #f0f3f8;
