@@ -27,7 +27,7 @@ export default function Documents() {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState({});
-  const [form, setForm] = useState({ no: nextDocNo(initialDocs), name: "", dept: DEPTS[0], date: "" });
+  const [form, setForm] = useState({ name: "", dept: DEPTS[0], date: "" });
   const [deptOpen, setDeptOpen] = useState(false);
   const [deptQuery, setDeptQuery] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -44,7 +44,7 @@ export default function Documents() {
   };
 
   const openForm = () => {
-    setForm({ no: nextDocNo(docs), name: "", dept: DEPTS[0], date: today() });
+    setForm({ name: "", dept: DEPTS[0], date: today() });
     setDeptQuery(DEPTS[0]);
     setErrors({});
     setOpen(true);
@@ -62,10 +62,6 @@ export default function Documents() {
 
   const validate = () => {
     const errs = {};
-    if (!form.no.trim()) errs.no = "กรุณากรอกเลขที่เอกสาร";
-    else if (!/^[A-Za-z0-9-]+$/.test(form.no.trim()) || !/\d/.test(form.no))
-      errs.no = "รูปแบบไม่ถูกต้อง เช่น DOC-1143";
-
     if (!form.name.trim()) errs.name = "กรุณากรอกชื่อเอกสาร";
     else if (form.name.trim().length < 2) errs.name = "ชื่อเอกสารต้องอย่างน้อย 2 ตัวอักษร";
 
@@ -103,7 +99,7 @@ export default function Documents() {
     e.preventDefault();
     if (!validate()) return;
     setPending({
-      no: form.no.trim(),
+      no: nextDocNo(docs),
       name: form.name.trim(),
       dept: (form.dept || deptQuery).trim(),
       date: fmtDate(form.date),
@@ -259,12 +255,6 @@ export default function Documents() {
             <p className="modal-sub">กรอกข้อมูลเอกสารที่จะสร้างลงในระบบ</p>
 
             <form onSubmit={submit} noValidate>
-              <label className="field">
-                <span>เลขที่เอกสาร</span>
-                <input className={errors.no ? "input-error" : ""} value={form.no} onChange={(e) => { setForm({ ...form, no: e.target.value }); clearErr("no"); }} />
-                {errors.no && <span className="field-error">{errors.no}</span>}
-              </label>
-
               <label className="field">
                 <span>ชื่อเอกสาร *</span>
                 <input
