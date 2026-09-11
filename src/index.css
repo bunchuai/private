@@ -162,6 +162,7 @@ button, input { font: inherit; }
 .input-error { border-color: #e53e3e; }
 .input-error:focus-within { border-color: #e53e3e; box-shadow: 0 0 0 4px rgba(229,62,62,.1); }
 .field-error { display: block; color: #e53e3e; font-size: 13px; margin: -10px 0 14px 19px; }
+.field .field-error { display: block; color: #e53e3e; font-size: 13px; margin: 6px 0 0 2px; }
 .input-box input { flex: 1; min-width: 0; border: 0; outline: 0; color: #1d3d6e; background: transparent; }
 .input-box input::placeholder { color: #8a9ab1; }
 .icon-button { border: 0; background: transparent; color: #7185a2; cursor: pointer; padding: 4px; }
