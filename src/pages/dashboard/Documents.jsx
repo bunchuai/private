@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Search, Plus, FileText, Download, X, ChevronDown } from "lucide-react";
+import { Search, Plus, FileText, X, ChevronDown, FileDown } from "lucide-react";
 
 const initialDocs = [
   { no: "DOC-1142", name: "สัญญาจ้างเหมาก่อสร้าง", dept: "จัดซื้อ", date: "11/09/2026", status: "ส่งแล้ว" },
@@ -33,6 +33,7 @@ export default function Documents() {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [pending, setPending] = useState(null);
   const comboboxRef = useRef(null);
+  const printRef = useRef(null);
 
   const today = () => {
     const now = new Date();
@@ -117,6 +118,76 @@ export default function Documents() {
     setOpen(false);
   };
 
+  const doExportExcel = async () => {
+    const ExcelJS = await import("exceljs");
+    const wb = new ExcelJS.Workbook();
+    const ws = wb.addWorksheet("รายการเอกสาร");
+    ws.columns = [12, 36, 14, 13, 16].map((w) => ({ width: w }));
+
+    ws.mergeCells("A1:E1");
+    ws.mergeCells("A2:E2");
+    ws.mergeCells("A3:E3");
+    ws.getCell("A1").value = "JPK solution & technology";
+    ws.getCell("A1").font = { bold: true, size: 16 };
+    ws.getCell("A1").alignment = { vertical: "middle" };
+    ws.getCell("A2").value = "รายงานเอกสาร";
+    ws.getCell("A2").font = { bold: true, size: 13 };
+    ws.getCell("A2").alignment = { vertical: "middle" };
+    ws.getCell("A3").value = `วันที่ออกรายงาน: ${fmtDate(today())}`;
+    ws.getCell("A3").font = { bold: true, size: 11 };
+    ws.getCell("A3").alignment = { vertical: "middle" };
+    ws.getRow(1).height = 24;
+    ws.getRow(2).height = 22;
+    ws.getRow(3).height = 20;
+
+    const headerRow = ws.getRow(4);
+    ["เลขที่", "ชื่อเอกสาร", "แผนก", "วันที่", "สถานะ"].forEach((h, i) => {
+      const cell = headerRow.getCell(i + 1);
+      cell.value = h;
+      cell.font = { bold: true };
+      cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFDEEBFB" } };
+      cell.alignment = { vertical: "middle" };
+    });
+    headerRow.height = 22;
+
+    filtered.forEach((d, i) => {
+      const row = ws.getRow(5 + i);
+      [d.no, d.name, d.dept, d.date, d.status].forEach((v, c) => {
+        row.getCell(c + 1).value = v;
+        row.getCell(c + 1).alignment = { vertical: "middle" };
+      });
+    });
+
+    const buf = await wb.xlsx.writeBuffer();
+    const blob = new Blob([buf], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `รายการเอกสาร_${fmtDate(today())}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  };
+
+  const doExportPDF = async () => {
+    const el = printRef.current;
+    if (!el) return;
+    const html2pdf = (await import("html2pdf.js")).default;
+    html2pdf()
+      .set({
+        margin: [8, 8, 8, 8],
+        filename: `รายการเอกสาร_${fmtDate(today())}.pdf`,
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "landscape" },
+      })
+      .from(el)
+      .save();
+  };
+
   const filtered = docs.filter(
     (d) =>
       d.name.toLowerCase().includes(search.trim().toLowerCase()) ||
@@ -137,9 +208,18 @@ export default function Documents() {
       <div className="dash-card">
         <div className="dash-card-head">
           <h3>รายการเอกสาร ({filtered.length})</h3>
-          <button className="ghost-btn"><Download size={17} />ส่งออก</button>
+          <div className="export-row">
+            <button className="ghost-btn" onClick={doExportPDF}><FileDown size={17} />PDF</button>
+            <button className="ghost-btn" onClick={doExportExcel}><FileDown size={17} />Excel</button>
+          </div>
         </div>
-        <table className="doc-table">
+        <div className="table-wrap" ref={printRef}>
+          <div className="report-print-head">
+            <h2>JPK solution &amp; technology</h2>
+            <p>รายงานเอกสาร</p>
+            <span>วันที่ออกรายงาน: {fmtDate(today())}</span>
+          </div>
+          <table className="doc-table">
           <thead>
             <tr>
               <th>เลขที่</th>
@@ -166,6 +246,7 @@ export default function Documents() {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
 
       {open && (
