@@ -16,7 +16,7 @@ const NAV = [
     ],
   },
   { type: "link", to: "/dashboard/employees", label: "พนักงาน", icon: <Users size={20} /> },
-  { type: "link", to: "/dashboard/settings", label: "ตั้งค่า", icon: <Settings size={20} /> },
+  { type: "link", to: "/dashboard/settings", label: "ตั้งค่าระบบ", icon: <Settings size={20} /> },
 ];
 
 export default function DashboardLayout() {
