@@ -26,18 +26,24 @@ export default function Documents() {
   const [docs, setDocs] = useState(initialDocs);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
   const [form, setForm] = useState({ no: nextDocNo(initialDocs), name: "", dept: DEPTS[0], date: "" });
   const [deptOpen, setDeptOpen] = useState(false);
   const [deptQuery, setDeptQuery] = useState("");
   const comboboxRef = useRef(null);
 
-  const today = () => new Date().toLocaleDateString("en-GB").split("/").reverse().map((p) => p.padStart(2, "0")).join("/");
+  const today = () => {
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    return `${y}-${m}-${d}`;
+  };
 
   const openForm = () => {
     setForm({ no: nextDocNo(docs), name: "", dept: DEPTS[0], date: today() });
     setDeptQuery(DEPTS[0]);
-    setError("");
+    setErrors({});
     setOpen(true);
   };
 
@@ -51,13 +57,49 @@ export default function Documents() {
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
 
+  const validate = () => {
+    const errs = {};
+    if (!form.no.trim()) errs.no = "กรุณากรอกเลขที่เอกสาร";
+    else if (!/^[A-Za-z0-9-]+$/.test(form.no.trim()) || !/\d/.test(form.no))
+      errs.no = "รูปแบบไม่ถูกต้อง เช่น DOC-1143";
+
+    if (!form.name.trim()) errs.name = "กรุณากรอกชื่อเอกสาร";
+    else if (form.name.trim().length < 2) errs.name = "ชื่อเอกสารต้องอย่างน้อย 2 ตัวอักษร";
+
+    if (!(form.dept || deptQuery).trim().toLowerCase()) errs.dept = "กรุณาเลือกแผนก";
+
+    const raw = form.date;
+    if (!raw) errs.date = "กรุณาเลือกวันที่";
+    else {
+      const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+      if (!m) errs.date = "รูปแบบวันที่ไม่ถูกต้อง";
+      else {
+        const given = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+        const now = new Date();
+        const todayOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const invalid = given.getFullYear() !== Number(m[1]) || given.getMonth() !== Number(m[2]) - 1 || given.getDate() !== Number(m[3]);
+        if (invalid) errs.date = "วันที่ไม่ถูกต้อง เช่น 11/09/2026";
+        else if (given > todayOnly) errs.date = "วันที่ไม่สามารถเป็นวันในอนาคตได้";
+      }
+    }
+
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const clearErr = (key) => {
+    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));
+  };
+
+  const fmtDate = (iso) => {
+    const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return m ? `${m[3]}/${m[2]}/${m[1]}` : iso;
+  };
+
   const submit = (e) => {
     e.preventDefault();
-    if (!form.name.trim()) {
-      setError("กรุณากรอกชื่อเอกสาร");
-      return;
-    }
-    setDocs([{ ...form, name: form.name.trim(), dept: (form.dept || deptQuery).trim(), status: "รอดำเนินการ" }, ...docs]);
+    if (!validate()) return;
+    setDocs([{ ...form, no: form.no.trim(), name: form.name.trim(), dept: (form.dept || deptQuery).trim(), date: fmtDate(form.date), status: "รอดำเนินการ" }, ...docs]);
     setOpen(false);
   };
 
@@ -124,26 +166,29 @@ export default function Documents() {
             <form onSubmit={submit} noValidate>
               <label className="field">
                 <span>เลขที่เอกสาร</span>
-                <input value={form.no} onChange={(e) => setForm({ ...form, no: e.target.value })} />
+                <input className={errors.no ? "input-error" : ""} value={form.no} onChange={(e) => { setForm({ ...form, no: e.target.value }); clearErr("no"); }} />
+                {errors.no && <span className="field-error">{errors.no}</span>}
               </label>
 
               <label className="field">
                 <span>ชื่อเอกสาร *</span>
                 <input
+                  className={errors.name ? "input-error" : ""}
                   value={form.name}
-                  onChange={(e) => { setForm({ ...form, name: e.target.value }); if (error) setError(""); }}
+                  onChange={(e) => { setForm({ ...form, name: e.target.value }); clearErr("name"); }}
                   placeholder="เช่น สัญญาซื้อขายสินค้า"
                 />
-                {error && <span className="field-error">{error}</span>}
+                {errors.name && <span className="field-error">{errors.name}</span>}
               </label>
 
               <div className="field combobox" ref={comboboxRef}>
                 <span>แผนก</span>
                 <div className="combobox-box">
                   <input
+                    className={errors.dept ? "input-error" : ""}
                     value={deptQuery}
                     onFocus={() => setDeptOpen(true)}
-                    onChange={(e) => { setDeptQuery(e.target.value); setDeptOpen(true); }}
+                    onChange={(e) => { setDeptQuery(e.target.value); setDeptOpen(true); clearErr("dept"); }}
                     placeholder="ค้นหาแผนก..."
                   />
                   <ChevronDown size={16} />
@@ -156,18 +201,25 @@ export default function Documents() {
                         key={d}
                         type="button"
                         className={d === form.dept ? "active" : ""}
-                        onClick={() => { setForm({ ...form, dept: d }); setDeptQuery(d); setDeptOpen(false); }}
+                        onClick={() => { setForm({ ...form, dept: d }); setDeptQuery(d); setDeptOpen(false); clearErr("dept"); }}
                       >
                         {d}
                       </button>
                     ))}
                   </div>
                 )}
+                {errors.dept && <span className="field-error">{errors.dept}</span>}
               </div>
 
               <label className="field">
                 <span>วันที่</span>
-                <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
+                <input
+                  className={errors.date ? "input-error" : ""}
+                  type="date"
+                  value={form.date}
+                  onChange={(e) => { setForm({ ...form, date: e.target.value }); clearErr("date"); }}
+                />
+                {errors.date && <span className="field-error">{errors.date}</span>}
               </label>
 
               <div className="modal-actions form-foot">
