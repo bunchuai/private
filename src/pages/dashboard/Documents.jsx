@@ -243,6 +243,7 @@ export default function Documents() {
             </form>
           </div>
         </div>
+      )}
       {confirmOpen && pending && (
         <div className="modal-overlay" onClick={() => setConfirmOpen(false)}>
           <div className="modal-card" onClick={(e) => e.stopPropagation()}>
