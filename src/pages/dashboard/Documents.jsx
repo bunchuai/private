@@ -27,7 +27,7 @@ export default function Documents() {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState({});
-  const [form, setForm] = useState({ name: "", dept: DEPTS[0], date: "" });
+  const [form, setForm] = useState({ name: "", dept: "", date: "" });
   const [deptOpen, setDeptOpen] = useState(false);
   const [deptQuery, setDeptQuery] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -44,8 +44,8 @@ export default function Documents() {
   };
 
   const openForm = () => {
-    setForm({ name: "", dept: DEPTS[0], date: today() });
-    setDeptQuery(DEPTS[0]);
+    setForm({ name: "", dept: "", date: today() });
+    setDeptQuery("");
     setErrors({});
     setOpen(true);
   };
