@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Sun, CloudSun, Cloud, CloudFog, CloudRain, CloudSnow, CloudLightning, Droplets, Wind, RefreshCw, MapPin } from "lucide-react";
 
 const CITY = { name: "กรุงเทพมหานคร", lat: 13.7563, lon: 100.5018 };
@@ -40,6 +40,7 @@ export default function WeatherWidget() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const started = useRef(false);
 
   const load = async () => {
     setLoading(true);
@@ -63,7 +64,10 @@ export default function WeatherWidget() {
   };
 
   useEffect(() => {
+    if (started.current) return;
+    started.current = true;
     load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) {
