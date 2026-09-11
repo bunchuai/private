@@ -24,6 +24,7 @@ const nextDocNo = (docs) => {
 };
 
 export default function Documents() {
+  const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState(initialDocs);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -52,6 +53,11 @@ export default function Documents() {
   };
 
   const deptMatches = DEPTS.filter((d) => d.toLowerCase().includes(deptQuery.trim().toLowerCase()));
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
     const onClick = (e) => {
@@ -196,8 +202,22 @@ export default function Documents() {
       d.dept.includes(search.trim())
   );
 
+  if (loading) {
+    return (
+      <div className="dash-section">
+        <div className="page-head"><div className="skeleton-block" style={{ width: 180, height: 42 }} /></div>
+        <div className="dash-card">
+          <div className="dash-card-head"><div className="skeleton-block" style={{ width: 200, height: 24 }} /></div>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="skeleton-line" style={{ width: `${90 - i * 6}%` }} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="dash-section">
+    <div className="dash-section fade-in">
       <div className="page-head">
         <button className="primary-btn" onClick={openForm}><Plus size={18} />สร้างเอกสาร</button>
         <div className="search-box">

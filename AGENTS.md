@@ -27,6 +27,10 @@ React 18 + Vite 8 SPA "JPK solution & technology" (ระบบภายใน, 
 - PDF: html2pdf (`await import("html2pdf.js")`) `.report-print-head` (หัวชื่อบริษัท) + ตาราง, landscape, ref ไปที่ `.table-wrap`
 - วันที่ต้องแปลงเป็น dd/mm/yyyy ก่อนแสดงในตาราง
 
+## Loading (ทุกหน้าบังคับ)
+- ทุกหน้าในระบบต้องมี skeleton shimmer + fade-in (pattern ใน `Overview.jsx`) — `useState loading` + `setTimeout` 800ms → โชว์ `.skeleton-block`/`.skeleton-line` ตรงกับ layout แล้วสลับเป็นจริงด้วย `.fade-in`
+- reuse class ใน `src/index.css`: `.skeleton-block`, `.skeleton-line`, `.fade-in`
+
 ## หมายเหตุ
 - dev: React StrictMode เอา double-run ของ effect → ถ้า fetch API ใน useEffect ต้องมี ref guard
 - หน้า Dashboard มี WeatherWidget (fetch conditionผ่าน env; ครั้งเดียวต่อ mount)

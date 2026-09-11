@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Search, Plus, Phone, Mail } from "lucide-react";
 
 const EMPLOYEES = [
@@ -11,8 +12,29 @@ const EMPLOYEES = [
 ];
 
 export default function Employees() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="dash-section">
+        <div className="page-head"><div className="skeleton-block" style={{ width: 180, height: 42 }} /></div>
+        <div className="dash-card">
+          <div className="dash-card-head"><div className="skeleton-block" style={{ width: 220, height: 24 }} /></div>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="skeleton-line" style={{ width: `${90 - i * 6}%` }} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="dash-section">
+    <div className="dash-section fade-in">
       <div className="page-head">
         <button className="primary-btn"><Plus size={18} />เพิ่มพนักงาน</button>
         <div className="search-box">

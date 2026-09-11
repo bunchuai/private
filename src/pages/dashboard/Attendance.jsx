@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import { Search, FileDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 const RECORDS = [
@@ -52,10 +52,16 @@ for (let g = 2023; g <= 2029; g++) {
 }
 
 export default function Attendance() {
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [month, setMonth] = useState("2026-09");
   const [page, setPage] = useState(1);
   const tableRef = useRef(null);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(t);
+  }, []);
 
   const now = new Date();
   const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
@@ -176,8 +182,33 @@ export default function Attendance() {
     return "sent";
   };
 
+  if (loading) {
+    return (
+      <div className="dash-section">
+        <div className="page-head">
+          <div className="filter-row">
+            <div className="skeleton-block" style={{ width: 200, height: 44 }} />
+            <div className="skeleton-block" style={{ width: 280, height: 44 }} />
+          </div>
+          <div className="skeleton-block" style={{ width: 240, height: 44 }} />
+        </div>
+        <div className="stat-row stat-row-sm">
+          {[1, 2, 3, 4].map((n) => (
+            <div key={n} className="skeleton-block" style={{ height: 64 }} />
+          ))}
+        </div>
+        <div className="dash-card">
+          <div className="dash-card-head"><div className="skeleton-block" style={{ width: 220, height: 24 }} /></div>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <div key={i} className="skeleton-line" style={{ width: `${90 - i * 6}%` }} />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="dash-section">
+    <div className="dash-section fade-in">
       <div className="page-head">
         <div className="filter-row">
           <label className="field-inline">

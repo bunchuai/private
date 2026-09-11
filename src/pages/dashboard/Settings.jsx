@@ -1,13 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Save, Shield, Bell, Building2 } from "lucide-react";
 
 export default function Settings() {
+  const [loading, setLoading] = useState(true);
   const [company, setCompany] = useState("JPK solution & technology");
   const [lang, setLang] = useState("th");
   const [notif, setNotif] = useState(true);
 
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="dash-section">
+        <div className="settings-grid">
+          {[1, 2, 3].map((n) => (
+            <div className="dash-card" key={n}>
+              <div className="dash-card-head"><div className="skeleton-block" style={{ width: 170, height: 24 }} /></div>
+              <div className="skeleton-line" style={{ width: "92%" }} />
+              <div className="skeleton-line" style={{ width: "68%" }} />
+            </div>
+          ))}
+        </div>
+        <div className="save-bar"><div className="skeleton-block" style={{ width: 180, height: 42 }} /></div>
+      </div>
+    );
+  }
+
   return (
-    <div className="dash-section">
+    <div className="dash-section fade-in">
       <div className="settings-grid">
         <div className="dash-card">
           <div className="dash-card-head">
