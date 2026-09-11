@@ -686,6 +686,19 @@ button, input { font: inherit; }
 .modal-actions { display: flex; gap: 12px; justify-content: center; }
 .modal-btn { padding: 12px 0; }
 .modal-btn { flex: 1; justify-content: center; }
+.modal-card.form-card { text-align: left; width: min(500px, 100%); }
+.form-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0; }
+.form-head h2 { margin: 0; }
+.form-close {
+  display: grid; place-items: center;
+  width: 34px; height: 34px;
+  border: 0; border-radius: 10px; background: #f0f3f8; color: #6f82a0;
+  cursor: pointer;
+}
+.form-close:hover { background: #e8eef7; color: #e0533d; }
+.form-card .modal-sub { margin: 6px 0 20px; color: #8a9ab1; font-size: 13.5px; }
+.form-card .field { text-align: left; }
+.form-foot { margin-top: 8px; }
 .danger-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 9px;
   padding: 12px 20px;
