@@ -46,7 +46,7 @@ export default function WeatherWidget() {
     setError("");
     try {
       const url =
-        `https://api.open-meteo.com/v1/forecast?latitude=${CITY.lat}&longitude=${CITY.lon}` +
+        `${import.meta.env.VITE_WEATHER_API_URL}?latitude=${CITY.lat}&longitude=${CITY.lon}` +
         `&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m` +
         `&hourly=temperature_2m,weather_code` +
         `&daily=weather_code,temperature_2m_max,temperature_2m_min` +
