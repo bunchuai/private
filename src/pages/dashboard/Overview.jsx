@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { FileText, Users, BarChart3, ClipboardCheck, TrendingUp } from "lucide-react";
 import WeatherWidget from "../../components/WeatherWidget";
 
@@ -25,8 +26,38 @@ const RECENT_DOCS = [
 ];
 
 export default function Overview() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 800);
+    return () => clearTimeout(t);
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="dash-section">
+        <div className="welcome-bar skeleton-block" style={{ height: 84 }} />
+        <div className="stat-row">
+          {[0, 1, 2, 3].map((i) => (
+            <div className="stat-card skeleton-block" key={i} style={{ height: 88 }} />
+          ))}
+        </div>
+        <div className="weather-card skeleton-block" style={{ height: 250, marginBottom: 18 }} />
+        <div className="dash-grid">
+          <div className="dash-card">
+            <div className="dash-card-head"><div className="skeleton-block" style={{ height: 18, width: 140, borderRadius: 8 }} /></div>
+            {[0, 1, 2, 3, 4].map((i) => <div key={i} className="skeleton-line" />)}
+          </div>
+          <div className="dash-card">
+            <div className="dash-card-head"><div className="skeleton-block" style={{ height: 18, width: 140, borderRadius: 8 }} /></div>
+            {[0, 1, 2, 3, 4].map((i) => <div key={i} className="skeleton-line" />)}
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className="dash-section">
+    <div className="dash-section fade-in">
       <div className="welcome-bar">
         <h2>ยินดีต้อนรับกลับ, อธิวัฒน์</h2>
         <p>วันนี้คุณมีงานรออนุมัติ 23 รายการและเอกสารใหม่ 12 ชุด</p>
