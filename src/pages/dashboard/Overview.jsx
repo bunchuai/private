@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FileText, Users, BarChart3, ClipboardCheck, TrendingUp } from "lucide-react";
-import WeatherWidget from "../../components/WeatherWidget";
+import WeatherWidget from "../../components/common/WeatherWidget";
 
 const STATS = [
   { label: "เอกสารทั้งหมด", value: "1,284", sub: "+12% จากเดือนที่แล้ว", icon: <FileText size={22} />, cls: "blue" },

@@ -1,5 +1,5 @@
-import BrandPanel from "../components/BrandPanel";
-import ForgotPasswordForm from "../components/ForgotPasswordForm";
+import BrandPanel from "../components/auth/BrandPanel";
+import ForgotPasswordForm from "../components/auth/ForgotPasswordForm";
 
 export default function ForgotPassword() {
   return (
