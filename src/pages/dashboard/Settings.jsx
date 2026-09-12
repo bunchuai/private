@@ -3,7 +3,7 @@ import { Save, Shield, Bell, Building2 } from "lucide-react";
 
 export default function Settings() {
   const [loading, setLoading] = useState(true);
-  const [company, setCompany] = useState("JPK solution & technology");
+  const [company, setCompany] = useState("JpkStartupProject");
   const [lang, setLang] = useState("th");
   const [notif, setNotif] = useState(true);
 

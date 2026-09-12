@@ -134,7 +134,7 @@ export default function Documents() {
     ws.mergeCells("A1:E1");
     ws.mergeCells("A2:E2");
     ws.mergeCells("A3:E3");
-    ws.getCell("A1").value = "JPK solution & technology";
+    ws.getCell("A1").value = "JpkStartupProject";
     ws.getCell("A1").font = { bold: true, size: 16 };
     ws.getCell("A1").alignment = { vertical: "middle" };
     ws.getCell("A2").value = "รายงานเอกสาร";
@@ -236,7 +236,7 @@ export default function Documents() {
         </div>
         <div className="table-wrap" ref={printRef}>
           <div className="report-print-head">
-            <h2>JPK solution &amp; technology</h2>
+            <h2>JpkStartupProject</h2>
             <p>รายงานเอกสาร</p>
             <span>วันที่ออกรายงาน: {fmtDate(today())}</span>
           </div>

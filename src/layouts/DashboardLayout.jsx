@@ -70,7 +70,7 @@ export default function DashboardLayout() {
         <div className="sidebar-head">
           <div className="logo-mark">JPK</div>
           <div className="sidebar-text">
-            <div className="brand-name">JPK solution</div>
+            <div className="brand-name">JpkStartupProject</div>
             <div className="brand-tagline">Internal System</div>
           </div>
           <button
@@ -151,7 +151,7 @@ export default function DashboardLayout() {
         <header className="topbar">
           <div className="topbar-title">
             <h1>ระบบบริหารจัดการภายในองค์กร</h1>
-            <span>JPK solution &amp; technology</span>
+            <span>JpkStartupProject</span>
           </div>
           <div className="topbar-user">
             <div className="avatar">{user?.name?.charAt(0).toUpperCase() || "ผ"}</div>

@@ -74,7 +74,7 @@ export default function ForgotPasswordForm() {
         )}
       </div>
 
-      <div className="copyright">© 2026 JPK solution &amp; technology. All rights reserved.</div>
+      <div className="copyright">© 2026 JpkStartupProject. All rights reserved.</div>
     </div>
   );
 }

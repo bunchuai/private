@@ -136,7 +136,7 @@ export default function LoginForm() {
         <p className="admin-help">ยังไม่มีบัญชี? ติดต่อผู้ดูแลระบบ</p>
       </div>
 
-      <div className="copyright">© 2026 JPK solution &amp; technology. All rights reserved.</div>
+      <div className="copyright">© 2026 JpkStartupProject. All rights reserved.</div>
     </div>
   );
 }

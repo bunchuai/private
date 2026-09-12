@@ -16,7 +16,7 @@ export default function BrandPanel() {
         <div className="brand-logo">
           <div className="logo-mark">JPK</div>
           <div>
-            <div className="brand-name">JPK solution &amp; technology</div>
+            <div className="brand-name">JpkStartupProject</div>
             <div className="brand-tagline">Internal System • ระบบภายในองค์กร</div>
           </div>
         </div>

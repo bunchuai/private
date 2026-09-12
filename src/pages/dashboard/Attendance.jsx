@@ -99,7 +99,7 @@ export default function Attendance() {
     ws.mergeCells("A2:J2");
     ws.mergeCells("A3:J3");
 
-    ws.getCell("A1").value = "JPK solution & technology";
+    ws.getCell("A1").value = "JpkStartupProject";
     ws.getCell("A1").font = { bold: true, size: 16 };
     ws.getCell("A1").alignment = { vertical: "middle" };
 
@@ -256,7 +256,7 @@ export default function Attendance() {
 
         <div className="table-wrap" ref={tableRef}>
           <div className="report-print-head">
-            <h2>JPK solution &amp; technology</h2>
+            <h2>JpkStartupProject</h2>
             <p>รายงานการเข้าออกงาน ประจำเดือน {toThaiMonthLabel(month)}</p>
             <span>วันที่ออกรายงาน: {toThaiDate(todayStr)}</span>
           </div>

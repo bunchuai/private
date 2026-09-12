@@ -1,7 +1,7 @@
 # AGENTS.md
 
 ## โปรเจกต์
-React 18 + Vite 8 SPA "JPK solution & technology" (ระบบภายใน, UI ภาษาไทย, router เป็น HashRouter)
+React 18 + Vite 8 SPA "JpkStartupProject" (ระบบภายใน, UI ภาษาไทย, router เป็น HashRouter)
 - Dev server port 5173, base: `/` (dev) / `/private/` (GH Pages build ด้วย env `GH_PAGES=true` ใน workflow)
 - Deploy GH Pages: push main → Actions build → branch `gh-pages` → https://bunchuai.github.io/private/
 - ต้องรัน `npm run build` ให้ผ่านทุกครั้งหลังแก้โค้ด ก่อน commit/push
@@ -15,6 +15,7 @@ React 18 + Vite 8 SPA "JPK solution & technology" (ระบบภายใน, 
 
 ## Form modal (PATTERN มาตรฐาน — ใช้กันทุก modal)
 - โครงสร้าง: `<div className="modal-overlay">` (ไม่ให้ onclick ปิด — ปิดปุ่ม X/ยกเลิกเท่านั้น) → `<div className="modal-card form-card">` → `.form-head` (h2 + ปุ่ม `.form-close`) → `<p className="modal-sub">` สีแดงหนา
+- **พื้นหลัง modal ต้อง TRANSPARENT (โปร่งใส)** — `.modal-overlay` background: transparent, ไม่มีม่านสี/เบลอ (แก้ที่ `src/index.css`)
 - ช่อง: `<label className="field"><span>label</span><input/></label>` (input สูง 44px)
 - ช่องแบบ dropdown ค้นหาได้: combobox (`src/components` pattern ใน Documents.jsx) — `.combobox`, `.combobox-list`, ปิดเมื่อคลิกนอก (useEffect mousedown)
 - วันที่: ใช้ `src/components/ThaiDatePicker.jsx` (ไทย พ.ศ., แสดง "11 กันยายน 2569", เก็บค่า ISO yyyy-mm-dd, validate ไม่เอาอนาคต)
@@ -23,7 +24,7 @@ React 18 + Vite 8 SPA "JPK solution & technology" (ระบบภายใน, 
 - ก่อนบันทึกจริง: เปิด confirm modal (`.modal-icon.ok`, `.confirm-rows`/`.confirm-row`) แสดงสรุป → ปุ่ม "ยืนยันการสร้าง"/"แก้ไข"
 
 ## Export เอกสาร (ทุกหน้ามี PDF/Excel หัวรายงานชื่อบริษัท)
-- Excel: exceljs (`await import("exceljs")`) — มา 3 แถว merge: "JPK solution & technology" (+หนา ขนาด16) / ชื่อรายงาน / วันที่ออกรายงาน, แถวหัว 4 พื้นเงิน `FFDEEBFB` หนา, ดาวน์โหลดผ่าน Blob
+- Excel: exceljs (`await import("exceljs")`) — มา 3 แถว merge: "JpkStartupProject" (+หนา ขนาด16) / ชื่อรายงาน / วันที่ออกรายงาน, แถวหัว 4 พื้นเงิน `FFDEEBFB` หนา, ดาวน์โหลดผ่าน Blob
 - PDF: html2pdf (`await import("html2pdf.js")`) `.report-print-head` (หัวชื่อบริษัท) + ตาราง, landscape, ref ไปที่ `.table-wrap`
 - วันที่ต้องแปลงเป็น dd/mm/yyyy ก่อนแสดงในตาราง
 
